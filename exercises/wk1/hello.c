@@ -1,17 +1,18 @@
-/* 
- * Basic C program to print out hello world! 
- * Author: Adeel Bhutta
-*/
-
 #include <stdio.h>
+#include <unistd.h>
 
 int main(void) {
-  int myNumber = 0;
-  printf("Hello: Welcome to C291!\n");
-  printf("Please enter a number and press ENTER: ");
-  scanf("%d", &myNumber);  
-  printf("Here is the number yor entered: %d\n",myNumber);
-  return(0); 
+	printf(" \"{Hello! Welcome to a Beautiful Fall @ IU!},/\\ This is Fall 2019's 1st 8 Week Course\"\n");	
+	printf("\"\"\\\\/\n");
+	int i;
+	while(1){
+       	 printf("Michael Bouvette");
+          fflush(stdout);
+		 for(i=1; i<=5;i++){
+               	 printf(".");
+               	 sleep(1);
+		 fflush(stdout);}
+	printf("\n");
+	sleep(30);}
+  return 0;
 }
-
-
