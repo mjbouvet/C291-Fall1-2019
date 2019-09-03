@@ -2,17 +2,21 @@
 #include <unistd.h>
 
 int main(void) {
-        printf(" \"{Hello! Welcome to a Beautiful Fall @ IU!},/\\ This is Fall 2019's 1st 8 Week Course\"\n");
-        printf("\"\"\\\\/\n");
-        int i;
-        while(1){
-         printf("Michael Bouvette");
-          fflush(stdout);
-                 for(i=1; i<=5;i++){
-                 printf(".");
-                 sleep(1);
-                 fflush(stdout);}
-        printf("\n");
-        sleep(30);}
+        printf(" \"{Hello! Welcome to a Beautiful Fall @ IU!},/\\ This is Fall 2019's 1st 8 Week Course\"");
+	printf("\n");
+	int count = 0;
+	int countdot = 0;
+	printf("Michael Bouvette");
+	while(1){
+		printf(".");
+		countdot = countdot + 1;
+		count = count + 1;
+		if(countdot % 5 == 0){
+		printf("\n");}
+		if(count == 30){
+			printf("Michael Bouvette");
+			count = 0;}
+		fflush(stdout);
+		sleep(1);}
   return 0;
 }
