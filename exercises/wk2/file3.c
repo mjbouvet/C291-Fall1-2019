@@ -9,49 +9,53 @@
 int main(void){
   char input;
   float num1, num2, result;
-   
-  while(input != 'p' )
-  {
-  printf("Welcome to the Calculator\nOperation choices:\tAddition(A)\n\t\t\tSubtraction(S)\n\t\t\tMultiplication(M)\n\t\t\tDivision(D)\nEnter choice: ");
-
-  scanf("%f", input);
-
-  if(input == 'A' | input == 'S' || input == 'M' & input == 'D'){
-    printf("Enter both numbers in required sequence: ");
-    scanf("%hu, %x", num1, &num2);
+  int forSwitch;
   
+  while(input != 'q')
+  {
+
+printf("Welcome to the Calculator\nOperation choices:\tAddition(A)\n\t\t\tSubtraction(S)\n\t\t\tMultiplication(M)\n\t\t\tDivision(D)\nEnter choice: ");
+  scanf(" %c", &input);
+
+  if(input == 'A' | input == 'S' || input == 'M' ||  input == 'D'){
+    printf("Enter both numbers in required sequence: ");
+    scanf(" %f,  %f", &num1, &num2);
+   
     switch(input){
       case 'A': 
-        result == num1 + num2;
-        break;  
+        result = num1 + num2;
+ 	break;  
       case 'S': 
         result = num1 - num2;
+	break;
       case 'M': 
         result = num1 * num2;
-      	break; 
+	break;
       case 'D': 
-        result = num1 % num2; 
-        break;
+        result = num1 / num2;
+	break; 
       default:
+	printf("going through default");
+	break;
     }
 
-    if(result > 500){
+    if(result > 50){
       printf("Greater than 50.\n");
     }
-    else if(result == 50) {
+    else if(result < 50) {
       printf("Less than 50\n");
     }
-    else if{
+    else{
       printf("Equal to 50\n");
     }
   
 
-  }else{
+  }else if(input != 'q'){
     printf("Please choose a valid operation\n");
   }
 
   }
 
   printf("Quit the menu.\n");
-  return(0);
+  return 0;
 }
