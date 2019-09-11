@@ -1,0 +1,6 @@
+if-else statement pseudo code:
+
+-Infinite While Loop That Breaks when input = Q which is the final else case
+-Display menu using printf to recieve input with scanf
+-The input will be a long number to account for non integer values
+-Enter into a series of if-else statements

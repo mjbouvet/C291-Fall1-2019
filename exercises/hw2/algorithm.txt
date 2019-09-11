@@ -1,0 +1,9 @@
+First there needs to be a scanner that is reading the input of the user for the groups leaving and entering.
+There is also a count of people that needs to be updated and instantiated to the number of people in the room.
+There will be a while loop on the outside that will read if there has been two consecutive inputs that exceed
+the number of people allowed in the room at any given time, in the case that there is those two inputs then the 
+while loop will be exited and the program will end. Inside the while loop will be conditionals in if statements
+that will use the people count that is inputed by the user to determine whether the group can enter of if they can't
+and perform the appropriate action in response. After those conditionals there will be print statements 
+that show the current number of people in the room.
+

@@ -1,0 +1,100 @@
+#include <stdio.h>
+
+int main(void){
+  char conversionSymbol;
+  float convertAmount, convertedAmount;
+
+  while(conversionSymbol != 'q'){
+    printf("Enter a USD Amount to be converted between 1.00 and 1000.00: \n");
+    scanf(" %f", &convertAmount);
+    printf("Enter Symbol For Specific Conversion:\n E for Euro \n P for Pound \n A for Australian Dollars \n R for Renmibi \n L for Turkish Lira \n Y to Japanese Yen \n S to Swiss Francs \n # to Convert to all Currencies \n Q to Quit\n ");
+    scanf(" %c", &conversionSymbol);
+
+    if(conversionSymbol == 'Q'){
+      conversionSymbol = 'q';}
+   
+    if(conversionSymbol == 'E' || conversionSymbol == 'e' || conversionSymbol == 'P' || conversionSymbol == 'p' || conversionSymbol == 'A' || conversionSymbol == 'a' || conversionSymbol == 'R' || conversionSymbol == 'r' || conversionSymbol == 'L' || conversionSymbol == 'l' || conversionSymbol == 'Y' || conversionSymbol == 'y' || conversionSymbol == 'S' || conversionSymbol == 's' || conversionSymbol == '#'){
+     
+      switch(conversionSymbol){
+      case 'E':
+	convertedAmount = convertAmount * .9;
+	printf("The U.S. Dollar Amount %.2f, is %.2f in Euros\n", convertAmount, convertedAmount);
+	break;
+      case 'e':
+	convertedAmount = convertAmount * .9;
+	printf("The U.S. Dollar Amount %.2f, is %.2f in Euros\n", convertAmount, convertedAmount);
+	break;
+      case 'P':
+	convertedAmount = convertAmount * .81;
+	printf("The U.S. Dollar Amount %.2f, is %.2f in Pounds\n", convertAmount, convertedAmount);
+	break;
+      case 'p':
+	convertedAmount = convertAmount * .81;
+	printf("The U.S. Dollar Amount %.2f, is %.2f in Pounds\n", convertAmount, convertedAmount);
+	break;
+      case 'A':
+	convertedAmount = convertAmount * 1.46;
+	printf("The U.S. Dollar Amount %.2f, is %.2f in Australian Dollars\n", convertAmount, convertedAmount);
+	break;
+      case 'a':
+	convertedAmount = convertAmount * 1.46;
+	printf("The U.S. Dollar Amount %.2f, is %.2f in Australian Dollars\n", convertAmount, convertedAmount);
+	break;
+      case 'R':
+	convertedAmount = convertAmount * 7.12;
+	printf("The U.S. Dollar Amount %.2f, is %.2f in Chinese Renminbi\n", convertAmount, convertedAmount);
+	break;
+      case 'r':
+	convertedAmount = convertAmount * 7.12;
+	printf("The U.S. Dollar Amount %.2f, is %.2f in Chinese Renminbi\n", convertAmount, convertedAmount);
+	break;
+      case 'L':
+	convertedAmount = convertAmount * 5.75;
+	printf("The U.S. Dollar Amount %.2f, is %.2f in Turkish Lira\n", convertAmount, convertedAmount);
+	break;
+      case 'l':
+	convertedAmount = convertAmount * 5.75;
+	printf("The U.S. Dollar Amount %.2f, is %.2f in Turkish Lira\n", convertAmount, convertedAmount);
+	break;
+      case 'Y':
+	convertedAmount = convertAmount * 107.15;
+	printf("The U.S. Dollar Amount %.2f, is %.2f in Japanese Yen\n", convertAmount, convertedAmount);
+	break;
+      case 'y':
+	convertedAmount = convertAmount * 107.15;
+	printf("The U.S. Dollar Amount %.2f, is %.2f in Japanese Yen\n", convertAmount, convertedAmount);
+	break;
+      case 'S':
+	convertedAmount = convertAmount * .99;
+	printf("The U.S. Dollar Amount %.2f, is %.2f in Swiss Francs\n", convertAmount, convertedAmount);
+	break;
+      case 's':
+	convertedAmount = convertAmount * .99;
+	printf("The U.S. Dollar Amount %.2f, is %.2f in Swiss Francs\n", convertAmount, convertedAmount);
+	break;
+      case '#':
+	convertedAmount = convertAmount * .9;
+	printf("The U.S. Dollar Amount %.2f, is %.2f in Euros\n", convertAmount, convertedAmount);
+	convertedAmount = convertAmount * .81;
+	printf("The U.S. Dollar Amount %.2f, is %.2f in Pounds\n", convertAmount, convertedAmount);
+	convertedAmount = convertAmount * 1.46;
+	printf("The U.S. Dollar Amount %.2f, is %.2f in Australian Dollars\n", convertAmount, convertedAmount);
+	convertedAmount = convertAmount * 7.12;
+	printf("The U.S. Dollar Amount %.2f, is %.2f in Chinese Renminbi\n", convertAmount, convertedAmount);
+	convertedAmount = convertAmount * 5.75;
+	printf("The U.S. Dollar Amount %.2f, is %.2f in Turkish Lira\n", convertAmount, convertedAmount);
+	convertedAmount = convertAmount * 107.15;
+	printf("The U.S. Dollar Amount %.2f, is %.2f in Japanese Yen\n", convertAmount, convertedAmount);
+	convertedAmount = convertAmount * .99;
+	printf("The U.S. Dollar Amount %.2f, is %.2f in Swiss Francs\n", convertAmount, convertedAmount);
+	break;
+    default:
+      break;}
+    }
+    else if(conversionSymbol != 'q'){
+      printf("Please Enter a Valid Input");}
+  }
+  printf("Quitting the Menu\n");
+  return 0;
+}
+

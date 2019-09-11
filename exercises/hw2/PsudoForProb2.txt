@@ -1,0 +1,8 @@
+PsuedoforProb2:
+
+-Infinite While Loop that exits with an else case where the input equals Q
+-Using PrintF create a menu that asks for an input for the different currencies
+-Use ScanF to recieve input, if Q then break, if something else then convert
+-The input will be a long to deal with cents that come with the conversion
+-Enter a series of if-else statements to determine the correct conversion
+-Print out the correct conversion and reask for an input.
