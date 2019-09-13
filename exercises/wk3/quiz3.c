@@ -27,6 +27,18 @@
 
 #include<stdio.h>
 void printGrade(int score){
+  if(score >= 97 && score <= 100){
+    printf("Your Grade is : A+");}
+  else if(score >= 90 && score < 97){
+    printf("Your Grade is : A");}
+  else if(score >= 80 && score < 90){
+    printf("Your Grade is : B");}
+  else if(score >= 70 && score < 80){
+    printf("Your Grade is : C");}
+  else if(score < 70 && score >= 0){
+    printf("You're failing the class, your grade is: F");}
+  else if(score > 100 || score < 0){
+    printf("Invalid");}
 	//print the students grade based on their score in the class
 }
 int main(void){
@@ -34,17 +46,29 @@ int main(void){
 	float score;
 	int assignments;
 	do {
+	  score = 0;
+	  assignments = 0;
 		printf("How many assignmnets did you have ? ");
-
+		scanf("%d", &assignments); //reads integer input of number of assignments
     //get the number of assignmnets from the student
 
-		printf("Enter your score for all assignments : \n" );
-
+		printf("Enter your score for all assignments in the form Your Score,Maximum Score : \n" );
+		//reads the input of assignments in form "the score they got, the maximum possible score"
+		int i = 0;
+		float myScore = 0;
+		float maxScore = 0;
+		char temp;
+		do{ 
+		  scanf("%f,%f%c", &myScore, &maxScore, &temp);
+		  score += myScore/maxScore;
+		  i++;
+		}while(temp != '\n');//this do while loop goes through the input and takes two floats one is their score and one is the max score then adds the float division of the two against each other to a total score float value until the scanner reaches the line end character which signals the end of the input
+		  
     //get the student's score and the max score for each assignment
 
-    //calculate teh student's percentage in the class using the information you've gathered.
+    //calculate the student's percentage in the class using the information you've gathered.
 		int percent;
-
+		percent = (score / assignments) * 100;//Calculates Student's percentage by divding the total scores by the total number of assignments and multiplying that value by 100;
 		printGrade(percent);
 
 		printf(" \n Do you want to continue? (Y/N) ");
