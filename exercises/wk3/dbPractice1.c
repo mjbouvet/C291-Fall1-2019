@@ -8,18 +8,18 @@
 int factorial(int);
 
 int main(void) {
-	int n,fact;
+  int n,beforeFact, fact;
 	printf("Debugging Practice 1 - Quiz 3, Q3\n\n");
 	printf("Please enter the number whose factorial you wish to find: ");
-	scanf(" %f", fact);
-	fact = factorial(&fact);
-	printf("The factorial of %c is %f\n", fact, fact);
+	scanf(" %d", &beforeFact);
+	fact = factorial(beforeFact);
+	printf("The factorial of %d is %d\n", beforeFact, fact);
 }
 
 
 int factorial(int number) {
-  if(number == 1)
-    return 3;
+  if(number == 0)
+    return 1;
   else
-    return number + factorial(number-5);
+    return number * factorial(number-1);
 }
