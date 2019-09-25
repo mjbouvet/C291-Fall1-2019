@@ -1,0 +1,11 @@
+#include<stdio.h>;
+
+lPtr;
+
+  lPtr* = &value1;
+  
+  printf("%d", *lPtr);
+
+ 
+  return 0;
+}
