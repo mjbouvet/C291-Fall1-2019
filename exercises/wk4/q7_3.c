@@ -5,27 +5,26 @@
 
 #include <stdio.h>
 
-char CharacterScan(int*);
+char CharacterScan(int* iPtr);
 
 int main(void){
 	while(1){
 		int aCode;
 		int* iPtr;
-		char* c = CharacterScan(iPtr);
+		char c = CharacterScan(iPtr);
 
-		if(aCode)
+		if(c == 27)
 			break;
 		else
-			printf("%c is ASCII code %d.\n", c, iPtr);
+			printf("%c is ASCII code %d.\n", c, c);
 	}
 }
 
-char CharacterScan(int iPtr){
+char CharacterScan(int* iPtr){
 	char c;
 
 	printf("Enter a character: ");
 	scanf(" %c", &c);
 
-	iPtr = &c;
-	return &c;
+	return c;
 }
