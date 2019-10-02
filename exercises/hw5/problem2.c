@@ -1,0 +1,144 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <string.h>
+#include <stdlib.h>
+
+struct healthProfile{
+  char* firstName;
+  char* lastName;
+  char* gender;
+  struct date_of_birth* dob;
+  int height;
+  int weight; 
+  struct family_history* fh;
+};
+
+
+struct date_of_birth{
+  int month;
+  int day;
+  int yob;
+};
+
+struct family_history{
+  bool heartProblem;
+  bool bloodPressure;
+  bool cancer;
+};
+
+void setHealthProfile(struct healthProfile* healthProfile);
+float calculateTargetHeartRateLow(int age);
+float calculateTargetHeartRateHigh(int age);
+float bmi(int weight, int height);
+
+int main(){
+  struct healthProfile* healthProfile1;
+  struct date_of_birth* dob1;
+  struct family_history* fh1;
+  healthProfile1  =  (struct healthProfile*)malloc(sizeof(struct healthProfile));
+  dob1 = (struct date_of_birth*)malloc(sizeof(struct date_of_birth));
+  fh1 = (struct family_history*)malloc(sizeof(struct family_history));
+  healthProfile1->dob = dob1;
+  healthProfile1->fh = fh1;
+  setHealthProfile(healthProfile1);
+  int high;
+  int low;
+  int age;
+  if(healthProfile1->dob->month < 10){
+    age = 2019 - healthProfile1->dob->month;}
+  else if(healthProfile1->dob->month > 10){
+    age = 2019 - healthProfile1->dob->month +  1;}
+  else{
+    if(healthProfile1->dob->day = 1){
+      age = 2019 - healthProfile1->dob->month;}
+    else{
+      age = 2019-healthProfile1->dob->month + 1;}
+  }
+  low = calculateTargetHeartRateLow(age);
+  high = calculateTargetHeartRateHigh(age);
+  printf("Your Target Heart Rate is %d to %d", low, high);
+  int bmihold;
+  bmihold = bmi(healthProfile1->weight, healthProfile1->height);
+  printf("Your bmi is %d", bmi);
+
+  return 0;
+
+}
+
+
+void  setHealthProfile(struct healthProfile* healthProfile){
+  char firstName[20];
+  char lastName[20];
+  char gender[10];
+  int month;
+  int height;
+  int weight;
+  char test;
+  char test2;
+  char test3;
+
+  printf("What is your First Name: ");
+  scanf("%s", firstName);
+  healthProfile->firstName =  firstName;
+  
+  printf("What is your Last Name: ");
+  scanf("%s", lastName);
+  healthProfile->lastName = lastName;
+
+  printf("What is your Gender: ");
+  scanf("%s", gender);
+  healthProfile->gender = gender;
+
+  printf("What month were you born in: ");
+  scanf("%d", &month);
+  healthProfile->dob->month = month;
+ 
+  printf("What is you height in inches: ");
+  scanf("%d", &height);
+  healthProfile->height = height;
+
+  printf("What is you weight in pounds: ");
+  scanf("%d", &weight);
+  healthProfile->weight = weight;
+
+  printf("Enter 'y' if someone in your family has head heart problems, 'n' if not: ");
+  scanf("%c ", &test);
+  if(test == 'y'){
+    healthProfile->fh->heartProblem = true;}
+  else{
+    healthProfile->fh->heartProblem = false;}
+
+  printf("Enter 'y' if someone in your family has head heart problems, 'n' if not: ");
+  scanf("%c ", &test2);
+  if(test == 'y'){
+    healthProfile->fh->bloodPressure = true;}
+  else{
+    healthProfile->fh->bloodPressure = false;}
+
+  printf("Enter 'y' if someone in your family has head heart problems, 'n' if not: ");
+  scanf("%c ", &test3);
+  if(test == 'y'){
+    healthProfile->fh->cancer = true;}
+  else{
+    healthProfile->fh->cancer = false;}
+
+}
+
+float calculateTargetHeartRateLow(int age){
+  float low;
+  int max;
+  max = 200 - age;
+  low = (.55 * max) * 100;
+  return low;}
+
+float calculateTargetHeartRateHigh(int age){
+  float high;
+  int max;
+  max = 200 - age;
+  high = (.75 * max) * 100;
+  return high;}
+
+float bmi(int weight, int height){
+  float bmi;
+  bmi = (weight * 703)/(height * height);
+  return bmi;}
