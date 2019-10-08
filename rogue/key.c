@@ -36,9 +36,9 @@ int read_escape(int *read_char)
 {
 	int c;
 	if ((c = getch()) == ERR) {
-		return (NOCHAR);
+		return 0;
 	}
-	else if (c==0x1b) {
+	else if (c== 0x1b) {
 		if ((c = getch()) == '[') {
 			c=getch();
 			switch (c) {
@@ -61,6 +61,6 @@ int read_escape(int *read_char)
 	}
 	else {
 		*read_char = c;
-		return (REGCHAR);
+		return 1;
 	}
 }

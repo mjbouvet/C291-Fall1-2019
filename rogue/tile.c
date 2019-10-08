@@ -148,8 +148,6 @@ int move_enemies(tile* player, int x_off, int y_off, int x, int y, tile* t[100][
         count = 0;
         return 0;
 }
-
-
 //A function for moving the player
 int move_player (tile** player, int new_x, int new_y, int width, int height, tile * t[100][100])
 {	
@@ -164,7 +162,7 @@ int move_player (tile** player, int new_x, int new_y, int width, int height, til
 		up=1;
 	else up=0;
 	if(new_y >= 0 && new_y < (*player)->y && new_y%height < (*player)->y%height)
-		left =1
+	  left =1;
 	else 
 		left =0;
 	if(new_y >= 0 && new_y > (*player)->y && new_y%height > (*player)->y%height)
@@ -178,14 +176,17 @@ int move_player (tile** player, int new_x, int new_y, int width, int height, til
 			t[(*player)->x][(*player)->y]->state[NEW] = EMPTY;
 
 			*player = t[new_x][new_y];
-			return 1;    //returns 1 whe nthe player picks u pgold
+			return 1;    //returns 1 whe nthe player picks up gold
 		}else if(t[new_x][new_y]->state[CURRENT] == ENEMY){
 			t[new_x][new_y]->state[NEW] = PLAYER;
 			t[(*player)->x][(*player)->y]->state[NEW] = EMPTY;
 
 			*player = t[new_x][new_y];
 			return -1;    //returns -1 when the player walks into a monster
-		}else{
+		}else if(t[new_x][new_y]->stair){
+		  if(t[new_x][new_y]->stair){
+		    return 6;}} //If your tile is a stair return 6
+		else{
 			t[new_x][new_y]->state[NEW] = PLAYER;
 			t[(*player)->x][(*player)->y]->state[NEW] = EMPTY;
 
@@ -193,6 +194,8 @@ int move_player (tile** player, int new_x, int new_y, int width, int height, til
 			return 2;    //returns 2 when the player walks into an empty tile
 		}
 	}else{
-		return 0;    //returns 0 if the player isn't allowed to move
+	  if(t[new_x][new_y]->door){
+	    return 5;} //you can't move forward and your space is a door, so return 5 to be used in game.c
+	  return 0;    //returns 0 if the player isn't allowed to move
 	}
 }

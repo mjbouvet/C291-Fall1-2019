@@ -29,6 +29,6 @@
  * Additional copyrights may follow
  */
 
-enum {NOCHAR, REGCHAR, UP, DOWN, LEFT, RIGHT, BADESC};
+enum {NOCHAR, REGCHAR, UP, DOWN, LEFT, RIGHT, PAUSE, BADESC};
 
 int read_escape(int *);
