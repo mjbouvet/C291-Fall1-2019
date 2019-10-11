@@ -95,6 +95,8 @@ int game(void)
 	int test = 0;
 
 	int userIn;
+	
+	int health = 100;
 
 	int score = 0;
 	
@@ -129,6 +131,8 @@ int game(void)
 		case STEP:
 
 		  mvprintw(screen_y_offset - 2, screen_x_offset + 18, "The Score is: %d", score);//score counter prints on the top middle of screen
+
+		  mvprintw(screen_y_offset - 3, screen_x_offset + 18, "The Health is: %d  ", health);
 
 		  if(move_counter > move_timeout) {
 		    userIn = read_escape(&arrow);
@@ -200,7 +204,16 @@ int game(void)
 
 				
 				if(move_enemies(player, x_offset, y_offset, width, height, tiles))
-					state = EXIT;
+				  health -= 25;
+
+				if(move_strongenemies(player, x_offset, y_offset, width, height, tiles)){
+				  health -= 50;}
+
+				if(move_bossenemies(player, x_offset, y_offset, width, height, tiles)){
+				  health -= 100;}
+
+				if(health <= 0){
+				  state = EXIT;}
 
 				draw_room(r);
 				update_tiles(x_offset, y_offset, width, height, tiles);

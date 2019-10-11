@@ -45,7 +45,7 @@ typedef struct tile
   int state[3];
 } tile;
 
-enum {PLAYER, LOOT, EMPTY, ENEMY, UNCHANGED};  // States of each tile
+enum {PLAYER, LOOT, EMPTY, ENEMY, UNCHANGED, STRONGENEMY, BOSSENEMY};  // States of each tile
 enum {OLD, CURRENT, NEW};   // Enumerations for each step
 enum {SUCCESS, FAIL};       // Status of functions
 

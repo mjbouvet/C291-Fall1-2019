@@ -57,6 +57,10 @@ tile * create_tile(int init_x, int init_y, int d_x, int d_y, int p, int l, int e
 	t->state[CURRENT] = LOOT;
     }else if(rand()%500 == 1){
 	t->state[CURRENT] = ENEMY;
+    }else if(rand()%1000 == 1){
+      t->state[CURRENT] = STRONGENEMY;
+    }else if(rand()%2500 == 1){
+      t->state[CURRENT] = BOSSENEMY;
     }else{
 	t->state[CURRENT] = EMPTY;
     }
@@ -97,6 +101,10 @@ void display_tile (tile * t)
 		mvprintw(t->draw_y, t->draw_x, "$");
 	}else if(t->state[CURRENT] == ENEMY){
 		mvprintw(t->draw_y, t->draw_x, "E");
+	}else if(t->state[CURRENT] == STRONGENEMY){
+	        mvprintw(t->draw_y, t->draw_x, "X");
+	}else if(t->state[CURRENT] == BOSSENEMY){
+	  mvprintw(t->draw_y, t->draw_x, "B");
 	}else if(t->door){
 		mvprintw(t->draw_y, t->draw_x, "D");
 	}else if(t->stair){
@@ -148,6 +156,75 @@ int move_enemies(tile* player, int x_off, int y_off, int x, int y, tile* t[100][
         count = 0;
         return 0;
 }
+
+
+int move_strongenemies(tile* player, int x_off, int y_off, int x, int y, tile* t[100][100]){
+  static count;
+
+  if(count != 10){
+    count++;
+    return 0;
+  }
+
+  int i, j;
+  for(i=0;i<x;i++)
+    for(j=0;j<y;j++){
+      if(t[i+x_off][j+y_off]->state[CURRENT] == STRONGENEMY){
+	int x_diff = abs(player->x - (i+x_off));
+	int y_diff = abs(player->y - (j+y_off));
+
+	if(x_diff == 0 && y_diff == 0){
+	  t[i+x_off][j+y_off]->state[CURRENT] = PLAYER;
+	  return 1;
+	}else if(x_diff > y_diff){
+	  int new_x = i+x_off + (player->x - (i+x_off))/x_diff;
+	  t[i+x_off][j+y_off]->state[NEW] = EMPTY;
+	  t[new_x][j+y_off]->state[NEW] = STRONGENEMY;
+	}else{
+	  int new_y = j+y_off + (player->y - (j+y_off))/y_diff;
+	  t[i+x_off][j+y_off]->state[NEW] = EMPTY;
+	  t[i+x_off][new_y]->state[NEW] = STRONGENEMY;
+	}
+      }
+    }
+  count = 0;
+  return 0;
+}
+
+int move_bossenemies(tile* player, int x_off, int y_off, int x, int y, tile* t[100][100]){
+  static count;
+
+  if(count != 20){
+    count++;
+    return 0;
+  }
+
+  int i, j;
+  for(i=0;i<x;i++)
+    for(j=0;j<y;j++){
+      if(t[i+x_off][j+y_off]->state[CURRENT] == BOSSENEMY){
+        int x_diff = abs(player->x - (i+x_off));
+        int y_diff = abs(player->y - (j+y_off));
+
+        if(x_diff == 0 && y_diff == 0){
+          t[i+x_off][j+y_off]->state[CURRENT] = PLAYER;
+          return 1;
+        }else if(x_diff > y_diff){
+          int new_x = i+x_off + (player->x - (i+x_off))/x_diff;
+          t[i+x_off][j+y_off]->state[NEW] = EMPTY;
+          t[new_x][j+y_off]->state[NEW] = BOSSENEMY;
+        }else{
+          int new_y = j+y_off + (player->y - (j+y_off))/y_diff;
+          t[i+x_off][j+y_off]->state[NEW] = EMPTY;
+          t[i+x_off][new_y]->state[NEW] = BOSSENEMY;
+        }
+      }
+    }
+  count = 0;
+  return 0;
+}
+
+
 //A function for moving the player
 int move_player (tile** player, int new_x, int new_y, int width, int height, tile * t[100][100])
 {	
