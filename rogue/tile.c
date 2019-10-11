@@ -164,7 +164,7 @@ int move_player (tile** player, int new_x, int new_y, int width, int height, til
 		up=1;
 	else up=0;
 	if(new_y >= 0 && new_y < (*player)->y && new_y%height < (*player)->y%height)
-		left =1
+		left =1;
 	else 
 		left =0;
 	if(new_y >= 0 && new_y > (*player)->y && new_y%height > (*player)->y%height)
