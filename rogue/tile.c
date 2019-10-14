@@ -58,9 +58,9 @@ tile * create_tile(int init_x, int init_y, int d_x, int d_y, int p, int l, int e
     }else if(rand()%500 == 1){
 	t->state[CURRENT] = ENEMY;
     }else if(rand()%1000 == 1){
-      t->state[CURRENT] = STRONGENEMY;
+      t->state[CURRENT] = STRONGENEMY; //else if creates smaller chance to create a strong enemy and tile declaration
     }else if(rand()%2500 == 1){
-      t->state[CURRENT] = BOSSENEMY;
+      t->state[CURRENT] = BOSSENEMY; //even smaller chance to create a boss enemy and tile declaration
     }else{
 	t->state[CURRENT] = EMPTY;
     }
@@ -95,22 +95,48 @@ void update_tiles(int x_off, int y_off, int x, int y, tile* t[100][100]){
 
 void display_tile (tile * t)
 {
+  start_color();
+  init_pair(1, COLOR_BLACK, COLOR_MAGENTA); //create all the color pairs to be used for coloring the board
+  init_pair(2, COLOR_BLUE, COLOR_WHITE);
+  init_pair(3, COLOR_BLACK, COLOR_YELLOW);
+  init_pair(4, COLOR_CYAN, COLOR_RED);
+  init_pair(5, COLOR_GREEN, COLOR_RED);
+  init_pair(6, COLOR_BLACK, COLOR_RED);
+  init_pair(7, COLOR_BLUE, COLOR_BLUE);
+  init_pair(8, COLOR_BLACK, COLOR_WHITE);
+
 	if (t->state[CURRENT] == PLAYER){
+	  attron(COLOR_PAIR(2)); //set color for player 
 		mvprintw(t->draw_y, t->draw_x, "@");
+	  attroff(COLOR_PAIR(2));
 	}else if(t->state[CURRENT] == LOOT){
+	  attron(COLOR_PAIR(3)); //set color for Loot
 		mvprintw(t->draw_y, t->draw_x, "$");
+	  attroff(COLOR_PAIR(3));
 	}else if(t->state[CURRENT] == ENEMY){
+	  attron(COLOR_PAIR(4)); //set color for regular enemy
 		mvprintw(t->draw_y, t->draw_x, "E");
-	}else if(t->state[CURRENT] == STRONGENEMY){
-	        mvprintw(t->draw_y, t->draw_x, "X");
+	  attroff(COLOR_PAIR(4));
+	}else if(t->state[CURRENT] == STRONGENEMY){ 
+	  attron(COLOR_PAIR(5)); //set color for strong enemy
+	        mvprintw(t->draw_y, t->draw_x, "X"); //gives X label to strong enemy and prints at tile location
+	  attroff(COLOR_PAIR(5));
 	}else if(t->state[CURRENT] == BOSSENEMY){
-	  mvprintw(t->draw_y, t->draw_x, "B");
+	  attron(COLOR_PAIR(6)); //set color for boss enemy
+	        mvprintw(t->draw_y, t->draw_x, "B"); //gives B label to Boss enemy and prints at tile location
+	  attroff(COLOR_PAIR(6));
 	}else if(t->door){
+	  attron(COLOR_PAIR(1)); //set color for doors
 		mvprintw(t->draw_y, t->draw_x, "D");
+	  attroff(COLOR_PAIR(1));
 	}else if(t->stair){
+	  attron(COLOR_PAIR(8)); //set color for stairs
 		mvprintw(t->draw_y, t->draw_x, "H");
+	  attroff(COLOR_PAIR(8));
 	}else{
+	  attron(COLOR_PAIR(7)); //set color for all other tiles, namely the empty tiles
 		mvprintw(t->draw_y, t->draw_x, " ");
+	  attroff(COLOR_PAIR(7));
 	}
 }
 
@@ -161,7 +187,7 @@ int move_enemies(tile* player, int x_off, int y_off, int x, int y, tile* t[100][
 int move_strongenemies(tile* player, int x_off, int y_off, int x, int y, tile* t[100][100]){
   static count;
 
-  if(count != 10){
+  if(count != 10){ //strong enemies will move at half the speed of regular enemies
     count++;
     return 0;
   }
@@ -179,11 +205,12 @@ int move_strongenemies(tile* player, int x_off, int y_off, int x, int y, tile* t
 	}else if(x_diff > y_diff){
 	  int new_x = i+x_off + (player->x - (i+x_off))/x_diff;
 	  t[i+x_off][j+y_off]->state[NEW] = EMPTY;
-	  t[new_x][j+y_off]->state[NEW] = STRONGENEMY;
+	  t[new_x][j+y_off]->state[NEW] = STRONGENEMY; //keeps track of the x movement of the strong enemies
 	}else{
 	  int new_y = j+y_off + (player->y - (j+y_off))/y_diff;
 	  t[i+x_off][j+y_off]->state[NEW] = EMPTY;
-	  t[i+x_off][new_y]->state[NEW] = STRONGENEMY;
+	  t[i+x_off][new_y]->state[NEW] = STRONGENEMY; //keeps track of the y movement of the strong emeies
+	
 	}
       }
     }
@@ -194,7 +221,7 @@ int move_strongenemies(tile* player, int x_off, int y_off, int x, int y, tile* t
 int move_bossenemies(tile* player, int x_off, int y_off, int x, int y, tile* t[100][100]){
   static count;
 
-  if(count != 20){
+  if(count != 20){ //boss enemies move at half the speed of the strong enemies
     count++;
     return 0;
   }
@@ -212,11 +239,11 @@ int move_bossenemies(tile* player, int x_off, int y_off, int x, int y, tile* t[1
         }else if(x_diff > y_diff){
           int new_x = i+x_off + (player->x - (i+x_off))/x_diff;
           t[i+x_off][j+y_off]->state[NEW] = EMPTY;
-          t[new_x][j+y_off]->state[NEW] = BOSSENEMY;
+          t[new_x][j+y_off]->state[NEW] = BOSSENEMY; //keep track of the x location of the boss enemy
         }else{
           int new_y = j+y_off + (player->y - (j+y_off))/y_diff;
-          t[i+x_off][j+y_off]->state[NEW] = EMPTY;
-          t[i+x_off][new_y]->state[NEW] = BOSSENEMY;
+          t[i+x_off][j+y_off]->state[NEW] = EMPTY; 
+          t[i+x_off][new_y]->state[NEW] = BOSSENEMY; //keep track of the y location of the boss enemey
         }
       }
     }

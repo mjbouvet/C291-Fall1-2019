@@ -96,11 +96,15 @@ int game(void)
 
 	int userIn;
 	
-	int health = 100;
+	int health = 100; //Variable to Keep Track of Health
 
 	int score = 0;
 	
 	int floorcount = 1;
+
+	int save = 1;
+
+	char str[90];
 
 	while(1) {
 		switch(state) {
@@ -132,7 +136,7 @@ int game(void)
 
 		  mvprintw(screen_y_offset - 2, screen_x_offset + 18, "The Score is: %d", score);//score counter prints on the top middle of screen
 
-		  mvprintw(screen_y_offset - 3, screen_x_offset + 18, "The Health is: %d  ", health);
+		  mvprintw(screen_y_offset - 3, screen_x_offset + 18, "The Health is: %d  ", health);//prints out health one line above the score
 
 		  if(move_counter > move_timeout) {
 		    userIn = read_escape(&arrow);
@@ -147,6 +151,22 @@ int game(void)
 		      }
 		      if(arrow == 'q' || arrow == 'Q'){
 			state = EXIT;}
+		      if(arrow == 's' || arrow == 'S'){
+			FILE *file_pointer; //creates file pointer
+			sprintf(str, "saves/save_%d.game", save); //creates the format to save the program as
+			file_pointer = fopen(str, "w"); //sets the file_pointer
+			int i,j;
+			for(i = 0; i < width-1; i++){
+			  for(j = 0; j < height-1; j++){
+			    char saveCell;
+			    sprintf(&saveCell, "%d\n", tiles[i][j]->state[CURRENT]); //saves all the tiles in thegame 
+			    fputs(&saveCell, file_pointer);}//puts all the tiles into the file_pinter
+			}
+			
+			fclose(file_pointer);
+			save++;//sets up file for next save
+		      }
+			  
 		    }
 
 		    if(userIn == UP){
@@ -204,16 +224,16 @@ int game(void)
 
 				
 				if(move_enemies(player, x_offset, y_offset, width, height, tiles))
-				  health -= 25;
+				  health -= 25; //if the regular enemy hits the player deduct 25 health
 
-				if(move_strongenemies(player, x_offset, y_offset, width, height, tiles)){
-				  health -= 50;}
+				if(move_strongenemies(player, x_offset, y_offset, width, height, tiles)){ //moves strong enemies by calling function in tiles.c
+				  health -= 50;} //if one of the strong enemies hits the player deduct 50 health
 
-				if(move_bossenemies(player, x_offset, y_offset, width, height, tiles)){
-				  health -= 100;}
+				if(move_bossenemies(player, x_offset, y_offset, width, height, tiles)){ //moves boss enemies by calling function in tiles.c
+				  health -= 100;} //if one of the bosses hits the player deduct 100 health
 
 				if(health <= 0){
-				  state = EXIT;}
+				  state = EXIT;} //if the health goes below 0 the game is over
 
 				draw_room(r);
 				update_tiles(x_offset, y_offset, width, height, tiles);
@@ -225,9 +245,6 @@ int game(void)
 			}
 			move_counter++;
 			break;
-		case PAUSE:
-		  printf("This is the Pause State, press P again to keep playing");
-		  state = STEP;
 		case EXIT:
 			endwin();
 			return(0);
