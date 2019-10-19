@@ -86,7 +86,7 @@ int update_tile (tile * t){
 	return SUCCESS;
 }
 
-void update_tiles(int x_off, int y_off, int x, int y, tile* t[100][100]){
+void update_tiles(int x_off, int y_off, int x, int y, tile* t[500][500]){
 	int i, j;
 	for(i=0;i<x;i++)
 		for(j=0;j<y;j++)
@@ -141,7 +141,7 @@ void display_tile (tile * t)
 }
 
 
-void display_tiles (int x_off, int y_off, int width, int height, tile * t[100][100])
+void display_tiles (int x_off, int y_off, int width, int height, tile * t[500][500])
 {
     int x, y;
 	for (x = 0; x < width; x++)
@@ -150,7 +150,7 @@ void display_tiles (int x_off, int y_off, int width, int height, tile * t[100][1
 }
 
 //function for moving all the enemies
-int move_enemies(tile* player, int x_off, int y_off, int x, int y, tile* t[100][100]){
+int move_enemies(tile* player, int x_off, int y_off, int x, int y, tile* t[500][500]){
         static count;
 
         if(count != 5){
@@ -184,7 +184,7 @@ int move_enemies(tile* player, int x_off, int y_off, int x, int y, tile* t[100][
 }
 
 
-int move_strongenemies(tile* player, int x_off, int y_off, int x, int y, tile* t[100][100]){
+int move_strongenemies(tile* player, int x_off, int y_off, int x, int y, tile* t[500][500]){
   static count;
 
   if(count != 10){ //strong enemies will move at half the speed of regular enemies
@@ -218,7 +218,7 @@ int move_strongenemies(tile* player, int x_off, int y_off, int x, int y, tile* t
   return 0;
 }
 
-int move_bossenemies(tile* player, int x_off, int y_off, int x, int y, tile* t[100][100]){
+int move_bossenemies(tile* player, int x_off, int y_off, int x, int y, tile* t[500][500]){
   static count;
 
   if(count != 20){ //boss enemies move at half the speed of the strong enemies
@@ -253,7 +253,7 @@ int move_bossenemies(tile* player, int x_off, int y_off, int x, int y, tile* t[1
 
 
 //A function for moving the player
-int move_player (tile** player, int new_x, int new_y, int width, int height, tile * t[100][100])
+int move_player (tile** player, int new_x, int new_y, int width, int height, tile * t[500][500])
 {	
 	int down,up,left,right;
 

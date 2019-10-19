@@ -33,10 +33,12 @@
 
 
 //function the fill the array with tiles to make a floor
-void MakeFloor(tile* tiles[100][100], int width, int height, int screen_x_offset, int screen_y_offset, int floorcount){
+void MakeFloor(tile* tiles[500][500], int width, int height, int screen_x_offset, int screen_y_offset, int floorcount){
   int i, j, xdoor = 0, ydoor = 0;
-	for(i = 0; i < 100; i++){
-		for(j = 0; j < 100; j++){
+  int iLimit = 100 + ((floorcount-1)*width); //increases based on the floor you are on
+  int jLimit = 100 + ((floorcount - 1)*height);
+	for(i = 0; i < iLimit; i++){ 
+	  for(j = 0; j < jLimit; j++){ //the two for loops will change limits based on the floor count acessing and making the floor bigger as the player goes to higher floors
 		  tiles[i][j] = create_tile(i, j, screen_x_offset + i%width, screen_y_offset + j%height, 0, 0, 0);
 		  if(xdoor == 0){ //if the count of doors on a given x line is 0 then try and place a door
 		    if(j%height == 0 && j != 0 && rand()%height == 1){
@@ -58,9 +60,8 @@ void MakeFloor(tile* tiles[100][100], int width, int height, int screen_x_offset
 		}
 
 	}
-	if(floorcount <= 4){ //keep track of the floors created and don't create more stairs when 4 is passed
-	  tiles[rand()%100][rand()%100]->stair = 1;
-	  floorcount++;}
+	tiles[rand()%iLimit][rand()%jLimit]->stair = 1;
+	floorcount++; //took out limit on floors so there is now infinte floors, atleast until the game runs out of memory
 	tiles[width/2][height/2]->state[CURRENT] = PLAYER;
 }
 
@@ -80,7 +81,7 @@ int game(void)
 	int width = 50;
 	int height = 25;
 
-	tile * tiles[100][100];  //tiles that represent the floor
+	tile * tiles[500][500];  //tiles that represent the floor
 	tile * player;           //pointer to keep track of the player
 
 	room_t *r;
@@ -143,11 +144,162 @@ int game(void)
 
 		    if(userIn == REGCHAR){ //Checks that input is a regular character
 		      if(arrow == 'p' || arrow == 'P'){ //If P enter the While loop to pause
+			char* options[5] = {"Resume", "Save", "Load Game", "Help Menu", "Quit Game"};
+			int count = 0;
+		       
 			while(1){
+			
 			  userIn = read_escape(&arrow); //Resets to keep in while loop and read input
+
+			  if(userIn == UP){ //updates count to keep track of where cursor is in pause menu
+			    count --; 
+			    if(count < 0){
+			      count = 4;
+			    }
+			  }
+
+			  if(userIn == DOWN){ //does same as above but for pressing down arrow
+			    count ++;
+			    if(count > 4){
+			      count = 0;
+			    }
+			  }
+
+			  if(userIn == REGCHAR){
+
+
+			    if(arrow == 10){
+			      if(count == 0){
+				break;}
+			      if(count == 1){
+				FILE *file_pointer; //creates file pointer
+				sprintf(str, "saves/save_%d.game", save); //creates the format to save the program as
+				file_pointer = fopen(str, "w"); //sets the file_pointer
+				int i,j;
+				for(i = 0; i < width-1; i++){
+				  for(j = 0; j < height-1; j++){
+				    char saveCell;
+				    sprintf(&saveCell, "%d\n", tiles[i][j]->state[CURRENT]); //saves all the tiles in thegame
+				    fputs(&saveCell, file_pointer);}//puts all the tiles into the file_pinter
+				}
+
+				fclose(file_pointer);
+				save++;//sets up file for next save
+			      }
+			      if(count == 2){
+				while(1){
+				  nodelay(stdscr, FALSE); //dont wait for input
+				  echo();
+				
+				  mvprintw(9, screen_x_offset - 13, "Which Save would you like to load, there is a maximum of 10:");
+				  mvprintw(9, screen_x_offset + 47, " "); //prompt which save they player wants to load
+				  scanw("%d", &userIn); //scans what load the player wants
+
+				  nodelay(stdscr, TRUE); //wait for input
+				  noecho();
+
+				  if(userIn >= 1 && userIn <= 10){
+				    break; 
+				  }
+				  mvprintw(10, screen_x_offset - 18, "Invalid save number please choose from 1 to 10"); //if the sae number is not between 1 and ten tell them thsi
+				}
+				mvprintw(9, screen_x_offset - 18, "                                                                         ");
+				mvprintw(10, screen_x_offset + 7, "     ");
+				char loading[10];
+				sprintf(loading, "saves/save_%d.game", userIn); //get the save data and put it into a char array
+				FILE *load_pointer;
+				
+				load_pointer = fopen(loading, "r"); //open the data
+				if(load_pointer == NULL){
+				  mvprintw(9, screen_x_offset - 13, "%s does not exist.", loading); //if data doesn't exist, i.e. the save doesnt exist return this to prevent crash
+				  break;
+				}
+
+				int i, j, value;
+				for(i = 0; i < width - 1; i++){
+				  for(j = 0; j < height -1; j++){
+				    fscanf(load_pointer, "%d", &value); //load the pointer and get the vlaue from the file
+				    if(value == 0){
+				      tiles[i][j]->state[CURRENT] = PLAYER; //if the value is 0 it is the player
+				      player->x = i; //set the player to that location
+				      player->y = j;
+				    }
+				    else if(value == 1){
+                                      tiles[i][j]->state[CURRENT] = LOOT; //if 1 then it is loot
+                                    }
+				    else if(value == 2){
+                                      tiles[i][j]->state[CURRENT] = EMPTY; //if 2 then it is empty
+                                    }
+				    else if(value == 3){
+                                      tiles[i][j]->state[CURRENT] = ENEMY; //if 3 it is a normal enemy
+                                    }
+				    else if(value == 4){
+                                      tiles[i][j]->state[CURRENT] = UNCHANGED; //if 4 it is unchanged
+                                    }
+				    else if(value == 5){
+                                      tiles[i][j]->state[CURRENT] = STRONGENEMY; //if it is 5 it is a strong enemy
+                                    }
+				    else{ 
+                                      tiles[i][j]->state[CURRENT] = BOSSENEMY; //if it is 6 then it is a boss enemy
+                                    }
+				  }
+				}
+			      }
+			      if(count == 3){
+				erase(); //clear screen for help menu
+				int remove = 1;
+				while(remove){
+				  userIn = read_escape(&remove); //read input from user
+				  mvprintw(5, screen_x_offset - 18, "Press Up arrow to move up"); //display different keybinds
+				  mvprintw(6, screen_x_offset - 18, "Press Down arrow to move down");
+				  mvprintw(7, screen_x_offset - 18, "Press Left Arrow to move Left");
+				  mvprintw(8, screen_x_offset - 18, "Press Right Arrow to move Right");
+                                  mvprintw(9, screen_x_offset - 18, "Press S to save the game");
+				  mvprintw(10, screen_x_offset - 18, "Press L to load a game");
+				  mvprintw(11, screen_x_offset - 18, "Press P to Pause the game");
+                                  mvprintw(12, screen_x_offset - 18, "Press Q to quit the game");
+				  mvprintw(13, screen_x_offset - 18, "Press any letter key to exit this menu");
+				  if(userIn == REGCHAR) remove = 0; //once the user inputs a key it returns 0 so remove is 0 and the help menu is exited
+				}
+				erase();
+				break;
+			      }
+			      if(count == 4){
+				state = EXIT; //change state to exit when selected
+				break;
+			      }
+			    }			  
+
 			  if(userIn == REGCHAR && (arrow == 'p' || arrow == 'P')){ //When input is P again unpause
 			    break;}
+			  }
+			  int i = 0;
+			  for(i = 0; i < 5; i++){
+			    if(i == count){
+			      init_pair(1, COLOR_BLACK, COLOR_RED); //sets selected item on pause menu to this color
+			      attron(COLOR_PAIR(1));
+			      mvprintw(25 + i, 1, "%s", options[i]); //prints the entry from the different option choices
+			      attroff(COLOR_PAIR(1));
+			    }
+			    else{
+			      init_pair(2, COLOR_BLACK, COLOR_BLUE); //rest of pause meneu is this color
+			      attron(COLOR_PAIR(2));
+			      mvprintw(25+i, 1, "%s", options[i]);
+			      attroff(COLOR_PAIR(2));
+			    }
+			  }
+
 			}
+			mvprintw(25, 1, "                                     ");
+                        mvprintw(26, 1, "                                     ");
+                        mvprintw(27, 1, "                                     ");
+                        mvprintw(28, 1, "                                     ");
+                        mvprintw(29, 1, "                                     ");
+                        mvprintw(30, 1, "                                     ");
+                        mvprintw(31, 1, "                                     ");
+                        mvprintw(32, 1, "                                     ");
+                        mvprintw(33, 1, "                                     ");
+
 		      }
 		      if(arrow == 'q' || arrow == 'Q'){
 			state = EXIT;}
@@ -166,7 +318,66 @@ int game(void)
 			fclose(file_pointer);
 			save++;//sets up file for next save
 		      }
-			  
+
+		      if(arrow == 'l' || arrow == 'L'){
+			while(1){
+			  nodelay(stdscr, FALSE); //dont wait for input
+			  echo();
+
+			  mvprintw(9, screen_x_offset - 13, "Which Save would you like to load, there is a maximum of 10:");
+			  mvprintw(9, screen_x_offset + 47, " "); //prompt which save they player wants to load
+			  scanw("%d", &userIn); //scans what load the player wants
+
+			  nodelay(stdscr, TRUE); //wait for input
+			  noecho();
+
+			  if(userIn >= 1 && userIn <= 10){
+			    break;
+			  }
+			  mvprintw(10, screen_x_offset - 18, "Invalid save number please choose from 1 to 10"); //if the sae number is not between 1 and ten tell them thsi
+			}
+			mvprintw(9, screen_x_offset - 18, "                                                                         ");
+			mvprintw(10, screen_x_offset + 7, "     ");
+			char loading[10];
+			sprintf(loading, "saves/save_%d.game", userIn); //get the save data and put it into a char array
+			FILE *load_pointer;
+
+			load_pointer = fopen(loading, "r"); //open the data
+			if(load_pointer == NULL){
+			  mvprintw(9, screen_x_offset - 13, "%s does not exist.", loading); //if data doesn't exist, i.e. the save doesnt exist return this to prevent crash
+			  break;
+			}
+
+			int i, j, value;
+			for(i = 0; i < width - 1; i++){
+			  for(j = 0; j < height -1; j++){
+			    fscanf(load_pointer, "%d", &value); //load the pointer and get the vlaue from the file
+			    if(value == 0){
+			      tiles[i][j]->state[CURRENT] = PLAYER; //if the value is 0 it is the player
+			      player->x = i; //set the player to that location
+			      player->y = j;
+			    }
+			    else if(value == 1){
+			      tiles[i][j]->state[CURRENT] = LOOT; //if 1 then it is loot
+			    }
+			    else if(value == 2){
+			      tiles[i][j]->state[CURRENT] = EMPTY; //if 2 then it is empty
+			    }
+			    else if(value == 3){
+			      tiles[i][j]->state[CURRENT] = ENEMY; //if 3 it is a normal enemy
+			    }
+			    else if(value == 4){
+			      tiles[i][j]->state[CURRENT] = UNCHANGED; //if 4 it is unchanged
+			    }
+			    else if(value == 5){
+			      tiles[i][j]->state[CURRENT] = STRONGENEMY; //if it is 5 it is a strong enemy
+			    }
+			    else{
+			      tiles[i][j]->state[CURRENT] = BOSSENEMY; //if it is 6 then it is a boss enemy
+			    }
+			  }
+			}
+		      }	  
 		    }
 
 		    if(userIn == UP){
@@ -246,6 +457,15 @@ int game(void)
 			move_counter++;
 			break;
 		case EXIT:
+		  erase(); //clears screen
+		  mvprintw(screen_y_offset, screen_x_offset, "The game is over your score is: %d", score); //displays score
+		  mvprintw(screen_y_offset + 1, screen_x_offset, "Press any letter key to end the game"); //prompts for key
+		  while(1){
+		    userIn = read_escape(&arrow); //reads key
+		    if(userIn == REGCHAR){//once key is entered end game
+		      break;}
+		  }
+		  
 			endwin();
 			return(0);
 			break;
@@ -254,3 +474,4 @@ int game(void)
 		nanosleep(&tim,&tim_ret);
 	}
 }
+

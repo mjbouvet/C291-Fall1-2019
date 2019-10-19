@@ -53,9 +53,9 @@ tile* create_tile (int init_x, int init_y, int d_x, int d_y, int p, int l, int e
 int destroy_tile (tile*);
 void update_tiles(int x_off, int y_off, int x, int y, tile* t[x][y]);
 void display_tile (tile *);
-void display_tiles (int x_off, int y_off, int width, int height, tile* c[100][100]);
-int move_enemies(tile* player, int x_off, int y_off, int x, int y, tile* t[100][100]);
-int move_player (tile** player, int new_x, int new_y, int width, int height, tile* t[100][100]);
+void display_tiles (int x_off, int y_off, int width, int height, tile* c[500][500]);
+int move_enemies(tile* player, int x_off, int y_off, int x, int y, tile* t[500][500]);
+int move_player (tile** player, int new_x, int new_y, int width, int height, tile* t[500][500]);
 void test_cell (void);
 
 /* tile.h ends here */
